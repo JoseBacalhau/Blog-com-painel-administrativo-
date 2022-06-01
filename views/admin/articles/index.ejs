@@ -1,0 +1,48 @@
+<%- include('../../partials/header.ejs')%>
+<%- include('../../partials/navbar.ejs')%>
+<div class="container">
+    <hr>
+    <h2 id="articles">Artigo</h2>
+    <a class="btn btn-success form-control" href="/admin/articles/new">Criar Novo Artigo</a>
+    <hr>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Slug</th>
+                <th>Category</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% articles.forEach(article => { %>
+                <tr>
+                    <td><%= article.id %></td>
+                    <td><%= article.title %></td>
+                    <td><%= article.slug %></td>
+                    <td><%= article.category.title %></td>
+                    <td>
+                        <a href="/admin/articles/edit/<%= article.id%>" class="btn btn-warning">Editar</a>
+                            <form method="POST" action="/articles/delete" style="display: inline;" onsubmit="confirmarDelecao(event, this)"> <!-- Quando você usa o this dentro de um evento dentro de um html, ele ta referenciando ao elemento que está chamando esse evento, que no caso é o form-->
+                            <input type="hidden" name="id" value="<%= article.id %>">
+                            <button class="btn btn-danger">Deletar</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }) %>    
+        </tbody>
+    </table>
+</div>
+
+<%- include('../../partials/footer.ejs')%>
+<script>
+    function confirmarDelecao(event, form){
+        event.preventDefault();
+        var decision = confirm("Você quer deletar este Artigo ?");
+        if(decision){
+            form.submit();
+            console.log("Eu escolhi deletar!");
+        }
+    }
+</script>
